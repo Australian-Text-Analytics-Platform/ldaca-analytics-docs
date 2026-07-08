@@ -49,11 +49,11 @@ Type the word or phrase you want to study. The search is case-insensitive by def
 
 <h4 id="help-concordance-regex-toggle">Regular expressions</h4>
 
-Enable **Use Regular Expression** to search using pattern matching. This lets you find word variants, multiple terms at once, or complex patterns.
+Enable **Use Regular Expression** to search using pattern matching. This lets you find word variants, multiple terms at once, or complex patterns. For example, if you tick the regular expressions box and input “child\w*” (without the quotation marks), it will retrieve any word starting with the string *child* (followed by **zero** or more characters) – such as *child*, *children*, *childhood*. If you want to retrieve all the hashtags in your data, you can use the regular expression “#\w+” (without the quotation marks). This will retrieve anything starting with a hashtag followed by **one** or more characters. Here are some examples of regular expression patterns:
 
 | Pattern | What it matches |
 |---|---|
-| `child(ren)?` | *child* or *children* |
+| `child\w*` | any word starting with the string *child* followed by zero or more characters
 | `tax\|budget\|welfare` | Any one of the three words |
 | `#\w+` | Any hashtag |
 | `\w{2}-\d{4,6}` | IDs like *SA-3988* or *id-4589* |
