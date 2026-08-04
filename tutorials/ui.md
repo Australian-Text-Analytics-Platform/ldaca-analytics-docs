@@ -20,7 +20,7 @@ The left sidebar lists the available tool modules. Click a tool name to switch t
 - [**Topic Modelling**](./topic-modeling.md) — discover themes using BERTopic.
 - [**Quotation Extraction**](./quotation.md) — capture quoted speech with speaker and verb annotations.
 
-The edit icon next to the heading lets you customise which tools appear and also allows you to reset the [**hint system**](#help-ui-hint-system).
+The edit icon next to the heading lets you customise which tools appear.
 
 <h2 id="help-ui-data-selection">2. Data Selection</h2>
 
@@ -35,22 +35,28 @@ Below the tool list, the **Data Blocks** panel shows every data block in the act
 
 <h2 id="help-ui-task-centre">3. Task Centre</h2>
 
-The **Tasks** panel sits below data selection and tracks time-consuming background operations such as topic modelling or large data transformations.
+The **Tasks** panel sits below data selection and projects background Analyses
+from the active Workspace together with your retained User File Imports.
 
-- While a task is running, a progress bar and status message appear. Click **Stop** to cancel it.
-- **Successful tasks fade out automatically** after roughly 8 seconds and are removed from the list without any action needed.
-- **Failed or stopped tasks remain** on screen until you dismiss them manually — click **Clear** on the individual task card to remove it.
-- **Live updates** keeps the panel refreshed automatically so you can continue working while tasks run in the background.
+- Analysis rows show progress and status only. Use the Analysis's owning Tab to
+  cancel, clear, or re-run it.
+- Queued and running User File Imports show **Stop**. The row remains visible if
+  cancellation fails so you can try again.
+- Successful, failed, and cancelled User File Imports remain available until
+  you click **Clear**. Clearing the task removes its retained history record,
+  not any files it successfully imported.
+- **Live updates** keeps the panel refreshed automatically so you can continue
+  working while tasks run in the background.
 
 <h2 id="help-ui-workspace-graph-view">4. Workspace Graph View</h2>
 
 **Note:** The entire right column (Workspace Graph View and Data Viewer) can be collapsed to save screen space. Click the top-right arrow button to hide or show the right pane.
 
-The **Workspace Graph View** occupies the top-right area and visualises how data blocks relate to each other. Every data block is a node and every derivation (filter, join, sample, etc.) draws an edge from parent to child.
+The **Workspace Graph View** occupies the top-right area and visualises Data Block creation lineage. Every Data Block is a node, and creating a Derived Data Block draws an edge from parent to child. Updating an existing Data Block does not change the graph.
 
 - Click a node to select that data block across the entire interface. Click it again to deselect. Selections made here are reflected immediately in the Data Blocks panel (section 2) and vice versa.
+- Hover a Data Block and open its settings menu to **Rename**, **Clone**, **Undo**, **Redo**, or **Delete** it. Undo and Redo availability comes from that Data Block's current backend session history.
 - Use **Rename** to rename the active workspace.
-- Use **Delete (n)** to batch-remove all currently multi-selected nodes in one call. (Replaces the previous *Save* button, which is now redundant — workspaces autosave on every change.)
 - Pan and zoom the graph with your mouse to navigate large workspaces. A control panel sits at the top-right corner of the graph with the following buttons:
   - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="13" height="13" style="display:inline;vertical-align:text-bottom"><path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z"/></svg> **Zoom in** — increases the zoom level.
   - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5" width="13" height="2" style="display:inline;vertical-align:middle"><path d="M0 0h32v4.2H0z"/></svg> **Zoom out** — decreases the zoom level.
@@ -59,58 +65,6 @@ The **Workspace Graph View** occupies the top-right area and visualises how data
   - **□ / ▣ Overview** — toggles a minimap in the bottom-right corner of the graph, giving a bird's-eye view of the full workspace layout. Click again to hide it.
   - **⊘ Clear selection** — deselects all currently selected data blocks at once. Greyed out when nothing is selected.
 - Asterisked nodes indicate the currently selected data blocks.
-- **Multiple roots** in the same workspace (e.g. two unrelated imports) are now left-aligned uniformly via a virtual super-source rather than stair-cased. This makes side-by-side projects easier to compare visually.
-
-<h3 id="help-ui-workspace-node-colours">Node colours, focus, and the new-node outline</h3>
-
-![Node colour states (Active / Focus / Unselected)](tutorials/assets/ui/node_colours_states.png)
-
-Every node on the workspace graph carries an X/Y shade pair drawn from a 12-colour palette. The colour is **per workspace** and persisted in a small `ui_state.json` sidecar so it survives reloads, workspace switches, and shared workspace ZIPs.
-
-Three visual states tell you at a glance how a node relates to the analysis you're running:
-
-| State | What it means | How it looks |
-|---|---|---|
-| Active | Currently being analysed in the right-hand tool | Full saturation; node name in solid colour |
-| Focus | Selected via click / multi-select but not the active analysis input | Mid-saturation fill |
-| Unselected | Not currently part of any selection | Greyed body; if a colour has been assigned, the **name text** keeps a tint so the assignment is still visible |
-
-![Per-tab colour picker with preview state](tutorials/assets/ui/colour_picker_preview.png)
-
-- **Manual picks** via the per-tab colour picker preview *before* you click **Run** — committed only when the analysis actually starts on that node. This lets you experiment without polluting the persisted colour map.
-- The colour assignment is **global within the workspace**: a node always renders in the same colour everywhere — graph, sidebar, analysis tabs, Juxtorpus, dispersion legend, statistics-table captions, etc.
-
-![Newly-created node with a 3-px black outline](tutorials/assets/ui/new_node_outline.png)
-
-- **Newly-created nodes** (from *Detach*, *Clone*, *Join*, *Stack*, *Tokenise*) get a 3-px black outer outline until you first interact with them. That makes a fresh derivation easy to spot amid many similar grey blocks. The outline clears the first time you click or select the node.
-
-<h3 id="help-ui-workspace-node-actions">Node actions (right-click menu)</h3>
-
-![Right-click context menu on a graph node](tutorials/assets/ui/node_context_menu.png)
-
-Right-click any node to open its action menu. In addition to the standard *Select*, *Rename*, *Delete* entries, two v0.4 actions appear on data-bearing nodes:
-
-- **Tokenise** — opens the [Tokenise dialog](#help-ui-workspace-tokenise) below.
-- **Manage derived columns** — opens a per-node dialog listing every derivation registered on that node (e.g. one row per `__derived__.tokens` column added by Tokenise), with the source column, tokeniser model, and a delete control for each. The dialog reactively reflects deletions without a reopen.
-
-<h3 id="help-ui-workspace-tokenise">Tokenise action</h3>
-
-![Tokenise dialog with Japanese + dictionary picker](tutorials/assets/ui/tokenise_dialog.png)
-
-The **Tokenise** action adds a hidden `__derived__.tokens` column on the node so Concordance (tokens-mode) and Token Frequency can share a single segmentation. The operation is **idempotent** on `(source column, model)` — re-running with the same model replaces the previous derived column rather than stacking copies.
-
-The dialog has four fields:
-
-1. **Source column** — which text column to tokenise. Only string-typed columns are listed.
-2. **Language** — pre-populated from the node's stored language (set at import time, see [Data Loader → Language tag](./data-loader.md#help-data-loader-language)). Change it here if you need to override.
-3. **Dictionary** *(Japanese only at present)* — pick **IPADIC** (~15 MB, recommended general purpose) or **UniDic** (~50 MB, higher morphological accuracy). The chosen dict's model ID populates the model field.
-4. **Tokenizer model** — defaults to the recommended model for the chosen language. Accepts HuggingFace model IDs, the special `jieba` backend, or any of `lindera-ja-ipadic`, `lindera-ja-unidic`, `lindera-ko-dic`. **First-use note:** Lindera dicts are downloaded into the local cache (~15 MB for IPADIC, ~50 MB for UniDic, ~34 MB for ko-dic) the first time they're requested.
-
-**What happens after tokenise**
-
-- A new derivation appears in the node's *Manage derived columns* dialog and the Concordance / Token Frequency tabs auto-pick it when the source column is selected.
-- Tokens are persisted in a per-user content-addressed cache so re-tokenising the same `(text, tokeniser, model)` finishes in a fraction of the first-run time, even after a backend restart. The cache is swept on workspace / node / derived-column delete and at backend startup, so it never leaks orphans.
-- The `__derived__.tokens` column is **hidden from the Data Viewer, detach dialogs, Row Details, and exported files** — manage it via *Manage derived columns*. The derivation propagates correctly across `clone`, `filter`, `slice`, `concat`, `join`, and Polars-expression operations.
 
 <h2 id="help-ui-data-viewer">5. Data Viewer</h2>
 
@@ -118,8 +72,8 @@ The **Data Viewer** fills the bottom-right area and displays the contents of sel
 
 - Tabs along the top let you switch between multiple selected data blocks.
 - The **Data View** sub-tab shows the raw table; the **Rename** button lets you rename the data block.
-- **Undo** and **Redo** buttons revert or reapply the most recent in-place operation (e.g. rename a column, change a data type, create or delete a column).
-- Each column header shows the column name and its data type (e.g. `datetime`, `string`). Click the settings icon on a column to rename it or change its data type (if feasible) — for example, to convert a date column loaded as string to a `datetime` type. When converting, the app attempts to guess the date format automatically. This works for many common formats but can fail or produce incorrect results when the format is ambiguous (e.g. `01/02/03` could be read as DD/MM/YY, MM/DD/YY, or YY/MM/DD). If the conversion fails or the dates look wrong, use the **Format** field to specify the format explicitly using [Python strftime/strptime codes](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes). Common examples:
+- **Undo** and **Redo** revert or reapply the selected Data Block's most recent plan edit. The same actions are available in the graph Data Block menu. History is independent per Data Block, stores at most 50 plans, and lasts only while the Workspace remains open in the backend process. Closing and reopening preserves the latest data but clears both buttons.
+- Each column header shows the column name and its data type (e.g. `datetime`, `string`). Click the settings icon on a column to rename or delete it; use the data-type menu to convert its type. These operations update the selected Data Block without creating a new one. When converting, the app attempts to guess the date format automatically. This works for many common formats but can fail or produce incorrect results when the format is ambiguous (e.g. `01/02/03` could be read as DD/MM/YY, MM/DD/YY, or YY/MM/DD). If the conversion fails or the dates look wrong, use the **Format** field to specify the format explicitly using [Python strftime/strptime codes](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes). Common examples:
   - `%Y-%m-%d` → `2025-05-06`
   - `%d/%m/%Y` → `06/05/2025`
   - `%m/%d/%Y` → `05/06/2025`
@@ -138,8 +92,8 @@ The centre column is the main working area and shows the interface of whichever 
 
 - The tool name and a short description appear at the top.
 - Sub-tabs (e.g. Filter, Sample, Join, Stack, Find, Create in Preprocessing) let you switch between related operations within the same tool.
-- Most tools follow a common workflow: configure parameters → review a preview → click an action button (such as **Add to Workspace**) to produce a new data block.
-- Help icons (**?**) are placed next to individual controls and link directly to the relevant section of the tutorial.
+- Most tools follow a common workflow: configure parameters → review a preview → choose whether to create or update when offered → click **Create Data Block** or **Update Data Block**. Filter, Find, Create, and Expression offer both modes and default to creating a new block. Sample, Join, and Stack are create-only.
+- Help icons (**?**) are placed next to individual controls and link directly to the relevant written Help section.
 
 <h2 id="help-ui-working-directory">7. Working Directory</h2>
 
@@ -152,14 +106,19 @@ The **Working Directory** indicator at the bottom of the left sidebar shows the 
 
 <h2 id="help-ui-help-feedback">8. Help and Feedback</h2>
 
-The **Tutorial** and **Feedback** buttons at the very bottom of the left sidebar provide quick access to assistance.
+The **Help** and **Feedback** buttons at the very bottom of the left sidebar provide quick access to assistance.
 
-- **Tutorial** opens the built-in tutorial in a floating window (the one you are currently reading). Clicking any **?** help icon in the interface scrolls the tutorial to the relevant section.
+- **Help** opens the built-in written guides in a floating window (the one you are currently reading). Clicking any **?** icon scrolls Help to the relevant section.
 - **Feedback** opens a form where you can report bugs, request features, or ask questions. Your feedback goes directly to the developer team. Please do not include any confidential information.
 <span id="help-ui-hint-system"></span>
-- The app includes a **hint system** that displays contextual coach-mark bubbles near relevant UI elements to guide you through key steps (e.g. uploading a file, creating a workspace, selecting a column). Hints appear automatically when their triggering condition is met and are accompanied by a glowing highlight ring around the relevant element. Each hint offers two dismissal options:
-  - **Got it** / **Dismiss** — hides the hint for the current session only; it will reappear after a page reload if the condition is still met.
-  - **Don't show again** — permanently dismisses the hint until you manually reset it.
-- To bring back dismissed hints, click the **edit icon** (pencil) next to the **Views** heading in the left sidebar to open the view settings menu, then choose **Reset all hints** at the bottom of that menu. This restores all permanently and session-dismissed hints so they can appear again.
+- A **Contextual Hint** may appear after a successful action when a feature has
+  a short next-step message. Choose **Got it** or press **Enter** to acknowledge
+  that version. It will not appear again on this device unless its guidance is
+  updated.
+- Contextual Hints can be disabled under **Settings → Guidance**. The same page
+  can reset acknowledgment history for the current user. This release includes
+  the guidance framework but does not ship automatic Contextual Hints.
+- A replayable **Guided Tour** is shown in Help only when one is available. A
+  tour is started deliberately and is unaffected by the Contextual Hint switch.
 
 [← Back to tutorial index](./index.md)

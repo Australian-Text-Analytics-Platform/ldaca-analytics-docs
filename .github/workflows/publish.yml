@@ -2,7 +2,8 @@ name: Publish docs
 
 on:
   push:
-    branches: [main, 'v*.*']
+    branches: [main]
+    tags: ['v*.*']
   workflow_dispatch:
 
 permissions:
@@ -35,9 +36,8 @@ jobs:
             --exclude='package.json' \
             ./ _site/
       - name: Deploy to gh-pages (versioned path)
-        # Each branch writes to its own subdirectory of the persistent
-        # gh-pages branch. keep_files preserves other versions' directories
-        # so v0.3/ and v0.4/ coexist without clobbering each other.
+        # Main is a preview; mutable minor tags publish versioned app channels.
+        # keep_files preserves other version directories.
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

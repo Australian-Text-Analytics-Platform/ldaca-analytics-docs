@@ -5,8 +5,8 @@
 // Information pages are intentionally excluded — tutorials + references +
 // warnings cover the wiki audience; info pages are redundant there.
 //
-// The wiki is one-way: the docs repo is the source of truth. The wiki
-// is flat (no subdirectories), so file paths get encoded into page
+// The wiki is one-way from this publication mirror; authoring remains in the
+// main app frontend. The wiki is flat, so file paths get encoded into page
 // slugs (`tutorials/foo.md` → `Tutorials-Foo`), and image refs are
 // rewritten to absolute raw-content URLs back at this repo.
 //

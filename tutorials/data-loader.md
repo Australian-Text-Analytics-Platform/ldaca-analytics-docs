@@ -51,7 +51,7 @@ The workspace manager lists all saved workspaces, enabling you to switch between
 
 - Click **Activate** to set a workspace as the active project; the active workspace is visually highlighted.
 - Review the last-modified timestamp and data-block count to confirm you are loading the intended workspace.
-- Click **Download** to export the entire workspace as a ZIP archive. The archive contains all data blocks and workspace metadata. Data blocks are stored in [Parquet](https://parquet.apache.org/) format — a compressed, column-oriented binary format that preserves data types exactly and is far more compact than CSV. Because Parquet is a well-supported open standard, the downloaded files can also be opened directly in tools such as Python (pandas/polars), R, or DuckDB. The ZIP is saved to your browser's default downloads folder (or your system Downloads folder in the desktop app). You can upload the ZIP to another instance of the application to resume your work there — for example when sharing a project with a collaborator or moving between a local installation and a hosted server.
+- Click **Download** to export the entire workspace as a ZIP archive. The archive contains Workspace metadata and Data Blocks together with Tabs, completed or otherwise terminal Analyses, their durable Results and declared Artifacts, and the immutable query inputs needed to reopen them. Queued and running Analyses are omitted and their exported Tabs are empty. Data Blocks and retained query inputs are stored in [Parquet](https://parquet.apache.org/) format — a compressed, column-oriented binary format that preserves data types exactly and is far more compact than CSV. Because Parquet is a well-supported open standard, the downloaded files can also be opened directly in tools such as Python (pandas/polars), R, or DuckDB. The ZIP is saved to your browser's default downloads folder (or your system Downloads folder in the desktop app). You can upload the ZIP to another instance of the application to resume your work there — for example when sharing a project with a collaborator or moving between a local installation and a hosted server.
 - Click **Delete** to permanently remove a workspace that is no longer needed.
 
 <h2 id="help-data-loader-files-section">Files and uploads section</h2>
@@ -64,50 +64,25 @@ This panel is used to bring data into the application. It supports file uploads,
 
 Click this button to upload a file from your local machine. Supported formats:
 
-- Plain text: `.txt`, `.md`, `.xml`
-- Delimited tabular text: `.csv`, `.tsv`, `.xlsx`
-- Columnar tabular format: `.parquet`
-- ZIP-archived collections of plain text files
+- Delimited tables: `.csv`, `.tsv`
+- JSON: `.json`, `.jsonl`, `.ndjson`
+- Columnar tables: `.parquet`, `.avro`, `.arrow`, `.ipc`, `.feather`
+- Spreadsheets: `.xlsx`, `.xls`, `.xlsm`, `.xlsb`, `.ods`
+- UTF-8 text: `.txt`, `.text`, `.md`, `.rst`, `.log`
+- UTF-8 document archives: `.zip`
 
-Supported file types can be previewed before being added to the workspace as a data block.
+The application stores other uploaded files, but the Data Loader hides them
+because they cannot become Data Blocks. Folders remain visible even when they
+contain no supported files.
 
-<h3 id="help-data-loader-dtype-normalization">Column type normalisation on load</h3>
-
-When a file is loaded, every column dtype is coerced to a small **canonical profile** so downstream tools (filtering, joining, sampling, workspace save / reopen, snapshot capture) behave the same regardless of the source's exact type. The canonical types are:
-
-| Source family | Canonical | Notes |
-|---|---|---|
-| `Int8` / `Int16` / `Int32` / `Int64` / `UInt*` | `Int64` | Wider integer; never overflows on the targets Wordflow analyses produce. |
-| `Float32` / `Float64` / `Decimal` | `Float64` | Wider float; rounding behaviour matches polars defaults. |
-| `Datetime(*, *)` / `Date` / naïve timestamps | `Datetime[μs, UTC]` | Naïve timestamps assume UTC; convert before upload if your data is in another zone. |
-| `String` / `Utf8` / `Categorical` | `Utf8` | Categoricals are demoted so all string ops apply uniformly. |
-| `Boolean` | `Boolean` | Unchanged. |
-| `List[T]` / `Struct[…]` | preserved as-is | Inner element types follow the rules above. |
-
-If anything gets promoted at load time, you'll see a single consolidated banner listing every coerced column and its source vs. canonical type — once per file, not once per column. The data block then loads normally.
-
-**Why this exists.** Before v0.5 a workspace save could fail to round-trip if a single column was `Int8` instead of `Int64` (some sample-data feeds shipped narrow integer columns). Normalising on load makes the workspace's wire format predictable; the cost is a small one-time upcast on ingest.
+Supported file types can be previewed before being added to the workspace as a
+Data Block. A ZIP becomes a table with one row per member that can be decoded as
+strict UTF-8; members that fail decoding are ignored. The table records each member's path,
+filename stem, extension, and complete document text.
 
 <h2 id="help-data-loader-import-sample-button">Import sample data</h2>
 
-![Sample data catalogue picker](tutorials/assets/data_loader/sample_data_catalogue.png)
-
-Opens the **sample-data catalogue picker** — a multi-collection dialog populated from a remote catalogue published alongside the app (`ldaca-analytics-sample-data`). The dialog has two tabs: **Datasets** for raw text corpora (see below), and **Demo Snapshots** for pre-made analysis snapshots (see [Import demo snapshots](#help-data-loader-import-demo-snapshots) further down).
-
-The Datasets tab shows each collection with a status chip (*Bundled* / *Available* / *Not installed*), a one-line description, and an eye icon that opens the dataset README.
-
-- Tick the collections you want and click **Import selected**. Bundled datasets are copied instantly; larger remote datasets download in the background and appear in the file browser when ready.
-- **Why the change in v0.4?** Previously a single button copied everything bundled with the app; the new picker lets the catalogue grow without inflating the app install size, and gives you per-dataset citation context up front. See [Citation and licensing notices](#help-data-loader-citation-notice) below.
-- All sample data is publicly available and may be freely tested or removed. If sample data is used in a research output, please cite <img alt="citemark" src="references/assets/mark_ref.png" style="display: inline; height: 1em; vertical-align: middle;"> the dataset appropriately.
-
-<h3 id="help-data-loader-import-demo-snapshots">Import demo snapshots</h3>
-
-![Demo Snapshots tab in the Sample Data dialog](tutorials/assets/data_loader/demo_snapshots_tab.png)
-
-The **Demo Snapshots** tab in the Sample Data dialog lists curated `.ldaca-snapshot` bundles published with the sample-data catalogue — one or two for each analysis tool, demonstrating a typical use case against a publicly-available corpus. Pick one, click **Download**, and the snapshot drops into your local snapshots folder. Open it from the matching tool's **Open snapshot** button.
-
-- **Conflict handling.** If you already have a snapshot with the same filename locally, the picker skips it by default and flags a conflict warning. Click **Replace** if you want to overwrite your local copy with the catalogue version.
-- These are full Wordflow snapshots — same `.ldaca-snapshot` format you produce from Save snapshot. See the [Demo Snapshots tutorial](./snapshots.md) for what's inside a bundle.
+Use this option to download curated sample datasets from the Wordflow sample-data repository. These are intended for first-time users to explore the app's capabilities. All sample data is publicly available and may be freely tested or removed. If sample data is used in a research output, please cite <img alt="citemark" src="references/assets/mark_ref.png" style="display: inline; height: 1em; vertical-align: middle;"> the dataset appropriately.
 
 <h2 id="help-data-loader-import-ldaca-button">Import from LDaCA</h2>
 
@@ -135,27 +110,6 @@ Once a file is uploaded, imported, or downloaded, the following actions are avai
 - **Download** the original file to your local machine.
 - **Remove** the file from the application.
 
-<h2 id="help-data-loader-language">Language tag (multilingual support)</h2>
-
-![Language selector in the Add-to-Workspace panel](tutorials/assets/data_loader/language_selector.png)
-
-The **Language** dropdown in the Add-to-Workspace panel tags every data block at ingest time with the language of its text content. The chosen language flows through every downstream analysis tool — Concordance, Token Frequency, Topic Modelling, AI Annotation, and Quotation Extraction — and drives:
-
-- which **tokeniser** is selected by default (e.g. Lindera for Japanese/Korean, Jieba for Chinese, whitespace+lowercase fall-back for English and others);
-- the matching **stopword list** picked up by Token Frequency and Topic Modelling;
-- whether the **Quotation Extraction** tool is enabled on the data block (the underlying model is English-only — see [Quotation tutorial](./quotation.md));
-- the prompt hint passed to **AI Annotation** when calling an LLM.
-
-| Code | Label | Notes |
-|---|---|---|
-| `en` | English | Default; uses the bundled `bert-base-uncased` tokeniser. |
-| `zh` | Chinese | Jieba segmenter; simplified and traditional supported. |
-| `ja` | Japanese | Lindera with IPADIC (~15 MB) by default; UniDic (~50 MB) available for higher accuracy. Dict is downloaded on first use. |
-| `ko` | Korean | Lindera with ko-dic (~34 MB). Dict is downloaded on first use. |
-| `multi` | Other / Multilingual | XLM-RoBERTa tokeniser; use this for European languages or mixed-language corpora. |
-
-If you forget to set the language at import time, you can still pick one later on a per-tokenise basis via the **Tokenise** action on the workspace graph (see [User Interface Overview → Workspace Graph View](./ui.md#help-ui-workspace-graph-view)). The language stored on the data block is what surfaces in tooltips and gates the per-tool defaults.
-
 <h2 id="help-data-loader-file-organisation">Organising files</h2>
 
 The files panel supports folder management and drag-and-drop reorganisation so you can keep uploads tidy across projects.
@@ -166,7 +120,7 @@ Click the <kbd>+</kbd> folder icon next to any existing folder to create a subfo
 
 **Deleting files and folders**
 
-Click the trash icon next to any file to remove it permanently. There is no separate delete-folder button — a folder is removed automatically once all files inside it have been deleted.
+Click the trash icon next to a file or folder to request its permanent removal. A confirmation dialog identifies the selected item before deletion. Deleting a folder also deletes everything inside it.
 
 **Moving files by drag-and-drop**
 

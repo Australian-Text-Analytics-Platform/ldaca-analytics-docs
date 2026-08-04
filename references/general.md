@@ -7,10 +7,6 @@
 
 If you use LDaCA Wordflow in your research, please include the following statement (or an appropriate variation):
 
-Guo, S., Sun, C., Bednarek, M., Haan, S., Lynch, M. & Rehman, A. (2026), LDaCA Wordflow {{VERSION}} [Computer software]. https://github.com/Australian-Text-Analytics-Platform/ldaca-wordflow/. DOI: 10.5281/zenodo.20408328
-
-The DOI above always resolves to the latest version of LDaCA Wordflow on Zenodo. The version you used is recorded above (LDaCA Wordflow {{VERSION}}); each release also has its own version-specific DOI on its Zenodo record if you need to cite an exact version.
-
 > This study has utilised **LDaCA Wordflow**, developed for the Language Data Commons of Australia (LDaCA), available at [https://www.ldaca.edu.au](https://www.ldaca.edu.au).
 
 Where relevant, please also cite specific tools, notebooks, datasets, or software releases used in your analysis (e.g. via provided DOIs or repository references). For the latest version or updates, please visit the [GitHub repository](https://github.com/Australian-Text-Analytics-Platform/Ldaca_Text_Analytics_Tools).
@@ -23,7 +19,7 @@ In addition, we kindly ask that you inform the LDaCA team of publications and gr
 
 LDaCA Wordflow and associated LDaCA tools were developed by the **Sydney Informatics Hub (SIH)** and **Sydney Corpus Lab** in collaboration with partners across the **Language Data Commons of Australia (LDaCA)**.
 
-The Language Data Commons of Australia is a co-investment partnership with the **Australian Research Data Commons (ARDC)** through the **HASS and Indigenous Research Data Commons** (https://doi.org/10.47486/HIR001). The ARDC is enabled by the **Australian Government’s National Collaborative Research Infrastructure Strategy (NCRIS)**.
+LDaCA and its associated tools have received investment from the **Australian Research Data Commons (ARDC)**, which is enabled by the **National Collaborative Research Infrastructure Strategy (NCRIS)**.
 
 ---
 
@@ -54,16 +50,6 @@ We gratefully acknowledge the contributions of researchers, collaborators, and c
 - Participating in workshops, demonstrations, and early‑adopter programs  
 
 These contributions have been essential in ensuring that LDaCA Wordflow meets the needs of diverse research communities.
-
----
-
-## License
-
-LDaCA Wordflow is licensed under the **Apache License, Version 2.0**. See the bundled [`LICENSE`](https://github.com/Australian-Text-Analytics-Platform/ldaca-wordflow/blob/main/LICENSE) and [`NOTICE`](https://github.com/Australian-Text-Analytics-Platform/ldaca-wordflow/blob/main/NOTICE) files, or the canonical license text at [apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0).
-
-Apache 2.0 is a permissive open-source licence: you are free to use, modify, and redistribute Wordflow — including for commercial purposes — provided that you preserve the copyright and licence notices, mark any changed files as modified, and pass the `NOTICE` attribution forward in your own distribution. The licence also grants an explicit patent licence from contributors covering their contributions.
-
-Wordflow's nested components are distributed under their own permissive licences (MIT or MIT/Apache-2.0 dual), including `polars`, `polars-text`, `docworkspace`, `FastAPI`, `React`, and `Tauri`.
 
 ---
 
