@@ -1,12 +1,14 @@
 <!-- markdownlint-disable MD033 -->
 
-<h1 id="help-tutorial-index">LDaCA Wordflow Tutorial</h1>
+<h1 id="help-tutorial-index">LDaCA Wordflow Help</h1>
 
 <p align="center">
-  <img src="assets/LDaCA_logo_Main.png" alt="LDaCA" width="360" />
+  <img src="/LDaCA_logo_Dark.png" alt="LDaCA" width="360" />
 </p>
 
-Welcome to LDaCA Wordflow, your innovative solution for text analysis in research projects. This guide is designed to support new users as they begin their journey with Wordflow, providing clear instructions, practical examples, and inspiration for leveraging its powerful analysis features. Whether you are new to text analysis or an experienced researcher, this document will help you understand the installation process, the user interface, the core concepts behind Wordflow's interoperable analyses, and how to achieve meaningful outcomes from your analysis.
+Welcome to LDaCA Wordflow. This Help guide provides written instructions for
+the interface and each analysis feature. Open it at any time from **Help** in
+the sidebar or jump directly to a section with a **?** icon.
 
 ## Overview
 
@@ -44,8 +46,8 @@ Most operations (filtering, sampling, joining, stacking, detaching etc.) on a da
 ## How to use the help icons
 
 - Click a **?** icon next to a control to jump straight to its explanation.
-- The tutorial will scroll to that section and briefly highlight it.
-- If a help link is missing, you will see a small sonar-style toast and the tutorial will stay closed.
+- Help will scroll to that section and briefly highlight it.
+- If a help link is missing, you will see a toast and Help will stay closed.
 
 ## Quick start (first session)
 
@@ -57,29 +59,7 @@ Most operations (filtering, sampling, joining, stacking, detaching etc.) on a da
 
 > **Placeholder (image):** Add a hero screenshot of the workspace with highlighted side panels.
 
-## What's new in v0.5
-
-Wordflow v0.5 adds **Demo Snapshots** — save the current view of any analysis to a small `.ldaca-snapshot` bundle and re-open it later or share with a collaborator without re-running the analysis:
-
-- **Save / Open snapshot** buttons in every analysis tool's header — see the [Demo Snapshots tutorial](./snapshots.md).
-- **Trends client-side re-aggregation** — Trends snapshots are captured at the finest time bin you pick + up to 3 group-by columns; the viewer coarsens the time axis, drops group dimensions, and case-folds the legend locally. See [Trends → Snapshot re-aggregation](./sequential-analysis.md#help-sequential-snapshot-reagg).
-- **Demo Snapshots tab in the Sample Data dialog** — browse and download curated `.ldaca-snapshot` bundles bundled with the catalogue. See [Data Loader → Import demo snapshots](./data-loader.md#help-data-loader-import-demo-snapshots).
-- **Column type normalisation on load** — narrow integers, mixed-precision floats, and naïve datetimes are coerced to a canonical profile (`Int64` / `Float64` / `Datetime[μs, UTC]` / `Utf8`) at ingest, with one consolidated warning per file. See [Data Loader → Column type normalisation](./data-loader.md#help-data-loader-dtype-normalization).
-- **Snapshot-disabled tooltip** — every read-only control in snapshot view shows the same instant-display hover tooltip explaining the lock.
-
-## What's new in v0.4
-
-Wordflow v0.4 introduces end-to-end multilingual support and a workspace-graph refresh:
-
-- **Multilingual analyses** — Concordance, Token Frequency, Topic Modelling, and AI Annotation now work natively with English, Japanese, Korean, Simplified/Traditional Chinese, Vietnamese, French, German, Spanish, Portuguese, Italian, and Indonesian. Set the language on the [Data Loader → Language tag](./data-loader.md#help-data-loader-language) at import time and it flows through every downstream tool.
-- **Tokenise** action on the workspace graph (Lindera for JA/KO, Jieba for ZH, whitespace+lowercase elsewhere) — see [Workspace Graph View → Tokenise](./ui.md#help-ui-workspace-tokenise).
-- **Concordance Tokens-mode** (exact word match, required for CJK) with multi-keyword search — see [Concordance → Search mode](./concordance.md#help-concordance-search-mode).
-- **Workspace node colours** with Active / Focus / Unselected states — see [Workspace Graph View → Node colours](./ui.md#help-ui-workspace-node-colours).
-- **Sample-data catalogue picker** replacing the single bulk-import button — see [Data Loader → Import sample data](./data-loader.md#help-data-loader-import-sample-button).
-- **Topic-modelling post-fit stopword filter and word expansion** — see [Topic modelling → Post-fit stopword filter](./topic-modeling.md#help-topic-modeling-post-fit).
-- **Quotation Extraction** is now explicitly **English-only** with a disabled-with-tooltip gate on non-English data blocks — see [Quotation → English-only](./quotation.md#help-quotation-english-only).
-
-## Tutorial sections
+## Help sections
 
 - [User Interface Overview](./ui.md) — learn what each section of the main screen does.
 - [Data loader](./data-loader.md) — create workspaces and upload data.
@@ -89,7 +69,6 @@ Wordflow v0.4 introduces end-to-end multilingual support and a workspace-graph r
 - [Topic modeling](./topic-modeling.md) — discover themes with BERTopic.
 - [Sequential analysis](./sequential-analysis.md) — analyze sequences over time.
 - [Quotation extraction](./quotation.md) — capture quoted segments with context.
-- [Demo Snapshots](./snapshots.md) — save and share frozen views of any analysis.
 - [Export](./export.md) — download tables or reports.
 
 ## Questions to check your understanding

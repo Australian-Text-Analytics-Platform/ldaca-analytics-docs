@@ -12,7 +12,7 @@ This guide walks through every setting in the parameter panel and explains what 
 
 <h2 id="help-topic-modeling-parameters">Parameter panel</h2>
 
-The parameter panel is split into two columns. The **left** column controls *which* documents are processed (selection and sampling). The **right** column controls *how* the topics are formed (size mode, randomness, display).
+The parameter panel starts with the selected data blocks. Each block owns its text-column choice and sampling percentage. The compact parameter row below controls how topics are formed, reproducibility, and display.
 
 <h3 id="help-topic-modeling-data-block">Step 1 — Select your data</h3>
 
@@ -20,36 +20,35 @@ Use the data-block selector at the top to pick which corpus (or corpora) to anal
 
 For each selected block, choose the **text column** that contains the documents you want to analyse. Only columns that hold plain text are available.
 
-<h3 id="help-topic-modeling-sampling">Step 2 — Data Block Sampling</h3>
+<h3 id="help-topic-modeling-sampling">Step 2 — Sampling Per Data Block</h3>
 
-![Topic modelling parameters](tutorials/assets/topic_modelling/parameters.png)
 Embedding (converting documents into numbers the model can work with) is the slowest part of the process. If your corpus has tens of thousands of documents or more, running on the full set can take a very long time. Sampling lets the model work on a representative subset instead.
 
 **How it works**
 
-- The tool **automatically suggests** a sampling percentage when you select a corpus. If the corpus is small (roughly under 4,000 documents), sampling is turned off and the full set is used.
-- For larger corpora, the tool calculates a percentage that aims to keep the working set around 4,000 documents.
-- The coloured circle next to each corpus turns sampling on or off. When it is on, the circle fills with the corpus colour.
-- The percentage input lets you adjust the sample size. The estimated number of documents that will be processed is shown to the right.
+- Each selected data block card includes a **Sampling (N documents)** number input beside the text-column selector.
+- The default is **100%** per data block, which uses the full selected corpus.
+- The title shows the effective number of documents that will be processed after applying the percentage.
+- Increase the percentage for better topic stability; decrease it for faster exploratory runs.
 
 **Guidelines**
 
-| Corpus size | Suggested approach |
-|---|---|
-| < 5,000 docs | Use the full corpus (no sampling needed) |
-| 5,000 – 50,000 | 20–50 % is usually sufficient |
-| 50,000 – 500,000 | 5–15 % |
-| > 500,000 | 2–5 %, or aim for roughly 20,000–50,000 documents |
+| Corpus size      | Suggested approach                                               |
+| ---------------- | ---------------------------------------------------------------- |
+| < 100 docs       | Use 100%                                                         |
+| 100 – 5,000 docs | Start with 20–100% depending on how quickly the run needs to fit |
+| 5,000 – 50,000   | Use 10–50% for exploration, then increase for stability          |
+| > 50,000         | Start with 1–10% and increase when time allows                   |
 
 A working set of **10,000 – 50,000 documents** typically gives good topic quality while keeping run times manageable. Going much lower can produce noisy or unstable topics; going much higher increases run time without a proportional gain in quality.
 
-If the working set is less than five times the target number of topics, a warning appears below the sampling rows. If you see it, either increase the sample size or reduce the number of topics you are aiming for.
+If the working set is less than five times the target number of topics, a warning appears below the selected data blocks. If you see it, either increase the sampling percentage or reduce the number of topics you are aiming for.
 
-<h3 id="help-topic-modeling-options">Step 3 — Topic Modelling Options</h3>
+<h3 id="help-topic-modeling-options">Step 3 — Topic Parameters</h3>
 
 <h4 id="help-topic-modeling-topic-size-mode">Topic size mode</h4>
 
-The dropdown controls how you express *"how many topics do I want?"* Three modes are available; the value field next to the dropdown changes meaning depending on which one you pick.
+The dropdown controls how you express _"how many topics do I want?"_ Three modes are available; the value field next to the dropdown changes meaning depending on which one you pick.
 
 <h4 id="help-topic-modeling-aim-topic-no">Aim Topic No. (default)</h4>
 
@@ -63,7 +62,7 @@ Set a rough target for the number of topics you would like. The model uses this 
 
 Set the minimum number of documents that must share a theme for it to be counted as a topic. Documents that do not fit any topic are placed in an outlier group (Topic −1).
 
-- The **default value is calculated automatically** from your working-set size: roughly *working-set-size ÷ (10 × aim-topic-no)*. You do not need to change it unless the automatic value gives unwanted results.
+- The **default value is calculated automatically** from your working-set size: roughly _working-set-size ÷ (10 × aim-topic-no)_. You do not need to change it unless the automatic value gives unwanted results.
 - A higher min size → fewer, broader topics and a larger outlier group.
 - A lower min size → more topics, including small niche ones, but also more noise.
 - Useful when you want exact control over granularity rather than a target count.
@@ -72,7 +71,7 @@ Set the minimum number of documents that must share a theme for it to be counted
 
 The model first finds topics naturally, then merges the most similar ones until it reaches the number you specified.
 
-- Unlike *Aim Topic No.*, this **does** produce the exact count you request.
+- Unlike _Aim Topic No._, this **does** produce the exact count you request.
 - Because topics are merged rather than discovered at that resolution, fine distinctions between similar themes may be lost.
 - Useful when you need a fixed number of topics for comparison or reporting.
 
@@ -82,25 +81,25 @@ The number next to the dropdown starts greyed-out, showing an automatically calc
 
 The number changes colour to warn you when the ratio of topics to documents becomes unfavourable:
 
-| Colour | What it means | Rule of thumb |
-|---|---|---|
-| Grey (default) | Value is auto-calculated; not yet committed | — |
-| Black | Value committed by the user; ratio looks fine | ≥ 10 documents per estimated topic |
-| **Orange** | Ratio is getting tight; topics may be noisy | 3–9 documents per estimated topic |
-| **Red** | Ratio is too high; results will likely be unreliable | Fewer than 3 documents per estimated topic |
+| Colour         | What it means                                        | Rule of thumb                              |
+| -------------- | ---------------------------------------------------- | ------------------------------------------ |
+| Grey (default) | Value is auto-calculated; not yet committed          | —                                          |
+| Black          | Value committed by the user; ratio looks fine        | ≥ 10 documents per estimated topic         |
+| **Orange**     | Ratio is getting tight; topics may be noisy          | 3–9 documents per estimated topic          |
+| **Red**        | Ratio is too high; results will likely be unreliable | Fewer than 3 documents per estimated topic |
 
 The ratio is calculated differently depending on the mode:
 
 - **Aim Topic No. / Exact Topic No.**: working-doc count ÷ value entered. For example, 500 documents with a target of 80 topics → 6.25 docs/topic → orange.
 - **Min Topic Size**: the value itself is already the minimum number of documents per topic, so it is compared directly. For example, a min topic size of 2 → red regardless of corpus size.
 
-If you see orange or red, hover over the input for a short explanation. The most common fixes are to increase the working document count (reduce sampling) or lower the number of topics.
+If you see orange or red, hover over the input for a short explanation. The most common fixes are to increase the working document count (raise sampling) or lower the number of topics.
 
 <h3 id="help-topic-modeling-random-seed">Random Seed</h3>
 
 A number that controls the randomness in the process. Using the **same seed on the same data** will always produce the same result — useful when you want to reproduce a run or compare settings systematically.
 
-- Default: **42** (any non-negative whole number works).
+- Default: **0** (any non-negative whole number works).
 - This value starts greyed-out. Change it to check that your results are not an artefact of a particular random initialisation — run the same settings with two or three different seeds and see whether the topics are stable.
 - If topics change substantially between seeds, the corpus or settings may not be well-suited to the chosen number of topics.
 
@@ -108,33 +107,23 @@ A number that controls the randomness in the process. Using the **same seed on t
 
 How many representative words to display for each topic in the results.
 
-- Default: **15**. Range at run time: 1–50.
+- Default: **15**. Range: 1–50.
 - More words help you interpret ambiguous topics, but too many words can clutter the display.
 - **10–20** is a good range for most use cases.
 - This parameter only affects the visualisation; the underlying topics are unchanged.
-
-> **Post-fit expansion (v0.4):** the result panel can request up to **`max(50, 2 × setting)`** words per topic after fitting, without re-running the model. This is useful when a topic is ambiguous at 15 words but clearer at 30 — you don't have to commit upfront to a long list. See [Post-fit stopword filter & expansion](#help-topic-modeling-post-fit) under the result panel.
-
-<h3 id="help-topic-modeling-language-stopwords">Multi-language stopwords + view list</h3>
-
-![Multi-language stopword pool with the View-list panel open](tutorials/assets/topic_modelling/stopwords_view_list.png)
-
-When the working set spans multiple corpus languages, the stopword pool **merges per-corpus language-specific lists** so each language is fairly filtered. A read-only **View list** disclosure exposes exactly which stopwords are currently active across the merged set — useful for confirming that the right language packs are being applied and for spotting accidental over-filtering before a long run.
-
-The full active stopword list is also included in the **topic-modelling zip download** alongside the topics CSV and the bubble-chart image, so a run is reproducible end-to-end.
 
 <h2 id="help-topic-modeling-run">Step 4 — Run and interpret results</h2>
 
 Once the settings look right, click **Run Analysis**. A progress bar shows where the tool is in the pipeline:
 
-| Stage | Typical progress | What is happening |
-|---|---|---|
-| Loading data | 3–7 % | Reading documents from the workspace |
-| Loading model | ~7 % | Loading the embedding model into memory |
-| Embedding | 8–63 % | Converting each document into a numeric representation — this is the slowest stage |
-| Clustering | ~65–89 % | Grouping documents by similarity |
-| Building topics | ~90 % | Extracting representative words for each group |
-| Saving results | ~90–100 % | Writing the output |
+| Stage           | Typical progress | What is happening                                                                  |
+| --------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| Loading data    | 3–7 %            | Reading documents from the workspace                                               |
+| Loading model   | ~7 %             | Loading the embedding model into memory                                            |
+| Embedding       | 8–63 %           | Converting each document into a numeric representation — this is the slowest stage |
+| Clustering      | ~65–89 %         | Grouping documents by similarity                                                   |
+| Building topics | ~90 %            | Extracting representative words for each group                                     |
+| Saving results  | ~90–100 %        | Writing the output                                                                 |
 
 The first run after starting the app takes longer because the embedding model must be loaded into memory. Subsequent runs reuse the cached model.
 
@@ -154,63 +143,44 @@ The distance between two bubbles indicates their semantic similarity — the clo
 
 You can click to select or deselect a topic in the bubble chart. Your selection is also reflected in the bottom pane, where all topics are listed in two columns. Selecting topics lets you detach only the documents associated with those topics from the data block(s) as new derived data blocks.
 
+Choose **Add to Workspace** to select the source Data Blocks and source columns,
+confirm the new names, and start the detachment. With no selected topics, all
+topics are included. Each selected source creates a topic-data Data Block and a
+linked topic-meanings Data Block. The original Topic Modeling Result remains
+available in its tab.
+
 A quick wildcard filter can be applied using the **text input** in the right ("All Topics") column, which lets you quickly find all topics that contain a keyword of interest.
 
 **Topic −1 (outliers)** is the group of documents that did not fit well into any topic. A small outlier group is normal; a very large one (e.g. more than a third of documents) may mean the topics are too narrow, the corpus is very diverse, or the sample is too small.
 
-<h3 id="help-topic-modeling-post-fit">Post-fit stopword filter & word expansion</h3>
-
-![Post-fit stopword filter on topic-modelling representative words](tutorials/assets/topic_modelling/post_fit_stopwords.png)
-
-After a topic-modelling run, you can clean up the **representative words** displayed for each topic without re-running the embedder. Two controls are available in the result panel:
-
-- **Post-fit stopwords** — type words to suppress from the representative-word lists across every topic. Apply runs in milliseconds; remove or edit the list to undo.
-- **Words per topic** *(post-fit)* — set the displayed number of representative words up to **`max(50, 2 × the original setting)`**. The underlying model is unchanged; this just exposes a wider tail of words ranked by the same scoring function. Useful for inspecting ambiguous topics in detail without committing to a long list at run time.
-
-Both controls operate on the live cached result. Detach a topic (or topics) after applying them to bake the cleaned label set into the resulting data block.
-
 <h3 id="help-topic-modeling-clear-results">Clear results</h3>
 
-Topic modelling results are saved in the backend so this tab can reload and keep persistent pages of the last run. **Clear Results** clears the cached result in the backend and resets the tab.
-
-<h3 id="help-topic-modeling-snapshot">Save / open a snapshot</h3>
-
-The Topic Modelling card header carries **Save snapshot** and **Open snapshot** buttons. A snapshot freezes the fitted topics + per-topic representative words into a small `.ldaca-snapshot` bundle. In snapshot view the **post-fit stopword filter**, the **Words per topic** slider (adjustable up to the cap stored at fit time — `max(50, fit_value × 2)`), the bubble-chart zoom / pan / legend, and the topic selection still work; Run, Update, Clear Results, and Add to Workspace are disabled.
-
-See the [Demo Snapshots tutorial](./snapshots.md) for the full Save / Open flow.
-
-<h3 id="help-topic-modeling-embedding-cache">Embedding cache</h3>
-
-The slowest stage of topic modelling — converting each document into an embedding vector — is cached on disk. Each time the model encodes a document, the resulting vector is stored under a hash of that exact text. The next time topic modelling encounters the same text (in this corpus or any other), the embedding is read from disk in milliseconds instead of being recomputed. The cache is per-user and shared across all your workspaces, and it builds up automatically as you run topic modelling.
-
-**Clearing the cache.** You normally do not need to do this, but if you want to reclaim disk space, click the pencil icon next to **Views** in the sidebar (the *Edit visible views* button) and choose **Clear embedding cache** at the bottom of the menu. A confirmation dialog shows exactly how many files and how much disk space will be freed before you confirm. After clearing, the cache rebuilds itself naturally on subsequent topic modelling runs — the only cost is that those runs will be slower, especially for large corpora.
-
-**Tip — pre-run for big-corpus exploration.** If you plan to explore a large dataset by running topic modelling many times with different sub-corpora, sample fractions, or topic counts, do one **full-corpus** run first with a small topic number (e.g. 5 or 10). That first run will be slow — leaving it overnight is a reasonable strategy — but it primes the cache with embeddings for every document in the corpus. Subsequent runs on derived sub-corpora pick those embeddings up from the cache, so they finish much faster. As long as you do not click *Clear embedding cache*, those primed embeddings keep paying off across all your future explorations of the same texts.
+The tab keeps its current Topic Modelling Analysis in the backend so it can reload its lifecycle and Result pages. **Clear Results** removes that Analysis and resets the tab, including after failure or cancellation. **Re-run** clears the current Analysis before submitting its replacement.
 
 <h2 id="help-topic-modeling-troubleshooting">Troubleshooting</h2>
 
-| Symptom | Likely cause | What to try |
-|---|---|---|
-| Far fewer topics than the target | Min topic size too high relative to corpus | Increase the target number, or increase the sample size |
-| Almost all documents are outliers | Min topic size too high, or corpus too varied | Lower Min Topic Size, increase sampling, or accept fewer topics |
-| Topics all look the same | Target too low | Increase Aim Topic No. |
-| Results change a lot between runs | Topics are not stable — corpus may be too small or too diverse for this number of topics | Try different seeds; reduce target; increase sample |
-| Very long run time | Large working set | Reduce sampling percentage |
+| Symptom                           | Likely cause                                                                             | What to try                                                     |
+| --------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Far fewer topics than the target  | Min topic size too high relative to corpus                                               | Increase the target number, or increase the sample size         |
+| Almost all documents are outliers | Min topic size too high, or corpus too varied                                            | Lower Min Topic Size, raise sampling, or accept fewer topics |
+| Topics all look the same          | Target too low                                                                           | Increase Aim Topic No.                                          |
+| Results change a lot between runs | Topics are not stable — corpus may be too small or too diverse for this number of topics | Try different seeds; reduce target; increase sample             |
+| Very long run time                | Large working set                                                                        | Reduce the sampling percentage                                  |
 
 <h2 id="help-topic-modeling-defaults">Quick-reference defaults</h2>
 
-| Setting | Default | Reasonable range |
-|---|---|---|
-| Sampling | Auto (on if > ~4,000 docs) | Aim for 10,000–50,000 docs in working set |
-| Topic size mode | Aim Topic No. | — |
-| Aim Topic No. | Auto | 10–200 depending on corpus size and diversity |
-| Random Seed | 42 | Any non-negative whole number |
-| Words per topic | 15 | 10–20 |
+| Setting         | Default                    | Reasonable range                              |
+| --------------- | -------------------------- | --------------------------------------------- |
+| Sampling        | 100% per data block         | Aim for 10,000–50,000 docs in working set     |
+| Topic size mode | Aim Topic No.              | —                                             |
+| Aim Topic No.   | Auto                       | 10–200 depending on corpus size and diversity |
+| Random Seed     | 0                          | Any non-negative whole number                 |
+| Words per topic | 15                         | 10–20                                         |
 
 ## Practice exercise
 
-1. Run topic modelling on a single corpus with the suggested sampling and default *Aim Topic No.* mode.
-2. Switch to *Exact Topic No.* with a small number (e.g. 10) and compare the granularity.
+1. Run topic modelling on a single corpus with the default sampling and default _Aim Topic No._ mode.
+2. Switch to _Exact Topic No._ with a small number (e.g. 10) and compare the granularity.
 3. Re-run with two different random seeds and check whether the dominant topics remain stable.
 4. Detach a topic of interest into a new data block for further analysis.
 
