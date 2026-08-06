@@ -15,7 +15,9 @@ analysis without materializing a whole-corpus result in the browser.
 - Which search mode should I use?
   **Text** supports whole-word, regular-expression, and case-sensitive search
   over the selected source column. **Tokens** performs exact-token matching and
-  requires a tokenizer for every selected Data Block.
+  requires a tokenizer for every selected Data Block before running. Fresh
+  Concordance Analyses start in Text mode; selecting Tokens enables the
+  tokenizer controls.
 
 - How are Results paged?
   **Documents per page** controls how many source documents are evaluated for
@@ -36,10 +38,11 @@ analysis without materializing a whole-corpus result in the browser.
   those Results directly. Table View pages matches. Dispersion View pages
   qualifying source rows and charts one series per exact, case-sensitive term
   over the complete Result. In Review, hidden terms and selected bins filter
-  documents, markers, counts, and publication before sorting and paging.
-  **Add to Workspace** creates a Match Publication from Table View or a
-  document-wise publication with required `CONC_extraction` from Dispersion
-  View. With two sources, you can include either or both in one atomic request.
+  documents, markers, counts, and Data Block Creation before sorting and
+  paging. **Add to Workspace** starts Concordance Match Data Block Creation
+  from Table View or Concordance Document Data Block Creation with required
+  `CONC_extraction` from Dispersion View. With two sources, you can include
+  either or both in one atomic request.
 
 - Where can I get help?
   See the full Concordance tutorial in Help, or use the Feedback button in the
