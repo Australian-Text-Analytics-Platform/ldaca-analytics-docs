@@ -60,7 +60,12 @@ distinct.
 <h3 id="help-concordance-context">Step 3 — Set the context window</h3>
 
 **Left context** and **Right context** control how many tokens appear around a
-match. Both default to 10 and accept values from 0 to 50.
+match. Both default to 10 and accept values from 0 to 50. In Text mode,
+**Ignore punctuation** is on by default: punctuation and symbol-only tokens do
+not consume those counts or become L1/R1, but the original punctuation and
+whitespace remain visible in each context. This option does not change which
+text or regular-expression matches are found. Tokens mode already applies its
+tokenizer's punctuation filtering and does not show this option.
 
 <h3 id="help-concordance-batch-size">Step 4 — Choose documents per page</h3>
 
@@ -86,8 +91,10 @@ Preview pages, page sizes, and source-metadata sorts are fresh projections over
 the retained snapshot. They never read the current mutable Data Block, so
 editing a source cannot silently change that Preview Analysis.
 
-Generated `CONC_*` columns describe computed matches and are not sortable.
-Source metadata headers are sortable in separated per-Data-Block tables.
+In separated Preview tables, selected source metadata headers are sortable.
+Generated scalar headers such as matched text, L1/R1, frequencies, and offsets
+show **Run All to enable sorting** because Preview has not materialized the
+whole Result. Full document and left/right context strings stay unsorted.
 
 <h3 id="help-concordance-views">Table and dispersion views</h3>
 
@@ -96,6 +103,16 @@ Source metadata headers are sortable in separated per-Data-Block tables.
 Table view shows one row per match. Click a row to inspect the full source
 document and its metadata. Use the metadata selector to add source columns to
 the table.
+
+**L1** (`CONC_l1`) is the token immediately left of the match and **R1**
+(`CONC_r1`) is the token immediately right. Their frequency columns count each
+value across the complete Run All Result. The matched-text cell always uses
+strong source-colour emphasis. The last exact, case-sensitive L1 occurrence in
+the left context and the first R1 occurrence in the right context use a softer
+source-colour tint. Empty or unmatched anchors remain plain. Turn off
+**Highlight L1/R1 in context** to hide only those inline tints for the current
+tab session. The direct L1/R1 cells remain plain and available for sorting,
+frequencies, export, and Data Block Creation.
 
 <h4 id="help-concordance-dispersion-view">Dispersion view</h4>
 
@@ -185,6 +202,12 @@ View always shows qualifying **Documents per page**; filtering occurs before
 sorting, counting, and paging, and the selected page size applies independently
 to each source. Review has no page-local Found summary.
 
+Separated Review Table View can sort selected metadata, matched text, L1/R1,
+their frequencies, and start/end offsets across the complete materialized
+Result. Sorting is case-sensitive and uses Polars' default null ordering. Equal
+values have no guaranteed secondary order. The document and full context
+headers remain plain, and combined Review remains unsorted.
+
 The Review density chart always summarizes the complete immutable Result, not
 the visible page. `CONC_dispersion` remains a frontend presentation field and
 is never stored or queried as a physical Result column.
@@ -221,7 +244,7 @@ forest, including after failure or cancellation.
 | Tokens mode is unavailable | At least one selected Data Block has no source column | Select a source text column for every input |
 | Too many partial matches | Whole Word is off in Text mode | Enable **Whole Word** |
 | A regular expression fails | Invalid pattern syntax | Test the pattern on regexr.com |
-| A generated header does not sort | `CONC_*` values are computed after source paging | Sort by a displayed source metadata column |
+| A generated Preview header does not sort | Whole-Result generated sorting requires materialized matches | Run All, then sort the separated Review table |
 | Run All is disabled | Inputs are incomplete or another Run All is active | Complete the inputs or wait for the active Analysis |
 | Preview differs from the edited Data Block | You reopened a historical Preview Analysis | Use **Update Preview** to capture the current Data Block state |
 
@@ -234,8 +257,10 @@ forest, including after failure or cancellation.
 | Whole Word | Off | Text mode only |
 | Regular expression | Off | Text mode only |
 | Case Sensitive | Off | Text mode only |
+| Ignore punctuation | On | Text mode only; punctuation remains visible but does not consume context tokens |
 | Documents per page | 20 | Controls source documents evaluated per Preview page |
 | View | Table | Returning to Concordance starts in Table View |
+| Highlight L1/R1 in context | On | Local table-display state; matched text remains emphasized when off |
 | Bin No. | 20 | 4, 5, 10, 20, 25, 50, or 100 |
 | Chart type | Line | Line, Bar, or Area |
 | Review term visibility | All terms | Exact, case-sensitive labels |
