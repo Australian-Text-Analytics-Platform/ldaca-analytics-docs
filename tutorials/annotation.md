@@ -24,9 +24,17 @@ Choose **Start** to open the annotation table. Select a Codebook value for each
 row; each change is written directly to the annotation column as a Data Block
 Edit. Choose **Close** to hide the table without discarding saved labels.
 
-Use comparison columns and the difference filter to compare another coder or
-model with the active annotation column. Reliability statistics summarize
-agreement but do not explain why labels differ. Add a correction column when
+Use **Compare To** to add another coder or model. Each comparison starts masked
+as `•••`; reveal it from the eye button in its header to show values,
+difference colours, reliability, and its per-column difference filter. Hidden
+columns have a disabled filter, and hiding or removing the filtered column
+clears the filter. Filtered rows and counts are calculated before server
+pagination. Reliability statistics summarize agreement but do not explain why
+labels differ.
+
+**Compare To** and **Show metadata** are exclusive roles: a selected column is
+disabled in the other menu, and **Select all** skips disabled columns. The
+active correction column appears in neither menu. Add a correction column when
 you want reviewed decisions kept separately, and use metadata columns to retain
 useful source context in the table.
 
@@ -34,6 +42,11 @@ useful source context in the table.
 
 Expand AI settings and choose a named provider configuration and model. Provider
 credentials stay in Settings and are attached only when the request is sent.
+Create or edit connections under **Settings → AI**. API keys are optional when
+saving, but a built-in provider marked **Needs API key** cannot list models,
+Preview, or Run All until you add one. Custom endpoints may be keyless. Editing
+a key updates future requests; a Run All already queued or running keeps the key
+captured when it was submitted.
 An **Example Data Block** is optional; if used, choose both its text column and
 an existing annotation column containing reviewed labels. Set **Max examples
 per class**, then choose **Random**, **First N**, or **Last N**. Random sampling
@@ -57,10 +70,18 @@ Codebook, examples, model, or settings when the errors show a pattern.
 
 Choose **Run All** only after Preview is satisfactory. Run All executes from the
 saved Preview snapshot and writes labels to the selected annotation column. The
-Review table reflects the current Data Block and supports comparison,
-differences, reliability, metadata, and correction controls. A reviewed
+Review table reflects the current Data Block and supports the same hidden-first
+comparisons, per-column differences, reliability, metadata, and correction
+controls. A reviewed
 correction column can also be selected as the Example annotation column for a
 later run.
+
+A provider-wide failure is shown in Annotation and Tasks and writes no labels.
+When only individual rows cannot fit the provider context or produce a valid
+response, successful rows are published and a warning reports failed rows and
+batches. Failed rows keep their existing values in **Reprocess all** and remain
+blank in **Fill missing**; a successful explicit empty prediction may still
+clear a value.
 
 <h2 id="help-annotation-results">Results, Clear Results, and Undo</h2>
 
