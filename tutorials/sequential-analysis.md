@@ -67,13 +67,17 @@ When multiple grouping columns are added, categories are combined across all col
 
 <h2 id="help-sequential-run">Step 5 — Run the analysis</h2>
 
-Click **Run** to start the analysis. The button label changes to **Update** when you change parameters after a successful run, letting you re-run without clearing first.
+Click **Run** to start the analysis. The label always remains **Run**. Parameters
+lock only while the Analysis is submitting, queued, or running. After success,
+change an execution input to enable Run again; reverting to the submitted values
+disables it. Chart type, axis, selection, and visibility controls do not enable
+Run because they only change presentation.
 
 <h2 id="help-sequential-results">Result panel</h2>
 
 ![Trends and Sequence results](tutorials/assets/sequential_analysis/trends_results.png)
 
-The result panel shows a summary row, a chart, a legend, and the period-selection controls for extracting data.
+The result panel shows a summary row, a chart, a legend, and period-selection controls for inspecting the chart.
 
 <h3 id="help-sequential-stats">Summary stats</h3>
 
@@ -88,14 +92,14 @@ Six tiles at the top of the result panel summarise the current view. The **Total
 | Chosen | Buckets / documents in your current period selection; shows *0 / 0* until you click a period |
 | Groups | The group-by columns in effect, listed by name, or *None* |
 
-For example, a **Shown** value of *18 / 934* means 18 time buckets are currently visible, together containing 934 documents. The **Chosen** tile updates live as you click periods in the chart, and its document count is what drives the **Add to Workspace** button.
+For example, a **Shown** value of *18 / 934* means 18 time buckets are currently visible, together containing 934 documents. The **Chosen** tile updates live as you click periods in the chart.
 
 <h3 id="help-sequential-min-group-size">Min Group Size filter</h3>
 
 The **Min Group Size** input in the results header hides any group (series) whose total document count is below the value you enter. This is useful when a few groups have very few records and clutter the chart.
 
 - Default is 10. Set to 0 to show all groups regardless of size.
-- The filter applies immediately — no need to re-run.
+- The filter applies immediately — no need to choose Run again.
 - The **Shown** tile updates to reflect how many points and documents remain after filtering.
 
 <h3 id="help-sequential-chart-type">Chart type</h3>
@@ -133,22 +137,16 @@ Click any bar, line point, or area segment in the chart to select that time peri
 
 To select a range, click one period then **Shift-click** another — all periods between them are selected.
 
-The **Chosen** tile tracks how many points and documents are in the current selection. The **Add to Workspace** button shows the selection count.
+The **Chosen** tile tracks how many points and documents are in the current selection.
 
 Use **Clear Selection** to deselect all periods without losing any other settings.
 
-<h3 id="help-sequential-detach">Add to Workspace</h3>
-
-Once you have selected the periods of interest, use the **Add to Workspace** control below the chart to extract those documents into a new data block:
-
-1. Type a name in the **New data block name** field, or press <kbd>Tab</kbd> to accept the auto-generated placeholder (e.g. *MyCorpus_trend*).
-2. Click **Add to Workspace (N)** — where N is the number of selected time periods.
-
-The new data block will contain all documents from the selected periods that belong to the visible groups (groups hidden via the legend are excluded). The button is disabled if no periods are selected, if all periods are selected, or if no visible groups remain after the Min Group Size filter.
-
 <h3 id="help-sequential-clear-results">Clear results</h3>
 
-The tab keeps its current Trends and Sequence Analysis in the backend so it can reload its lifecycle and Result. **Clear Results** removes that Analysis and resets the tab, including after failure or cancellation. **Re-run** clears the current Analysis before submitting its replacement.
+The tab keeps its current Trends and Sequence Analysis in the backend so it can
+reload its lifecycle and Result. **Clear Results** removes that Analysis and
+resets the tab. After a failure or cancellation, parameters remain editable but
+Run stays disabled until you choose Clear Results.
 
 <h2 id="help-sequential-troubleshooting">Troubleshooting</h2>
 
@@ -158,7 +156,6 @@ The tab keeps its current Trends and Sequence Analysis in the backend so it can 
 | All groups filtered out | Min Group Size is too high | Lower Min Group Size or set it to 0 |
 | Too many series, chart is unreadable | Too many distinct values in group-by column(s) | Remove a group-by column, or filter the data block first |
 | "No sequential analysis data available" | Column type or interval is incompatible with the data | Check the column contains valid dates or numbers; check the interval is > 0 |
-| Add to Workspace is disabled | No periods selected, or all periods selected, or no visible groups | Select a subset of periods; adjust Min Group Size so at least one group is visible |
 
 <h2 id="help-sequential-defaults">Quick-reference defaults</h2>
 
@@ -179,8 +176,8 @@ The tab keeps its current Trends and Sequence Analysis in the backend so it can 
 1. Select a data block that has a datetime column.
 2. Run the analysis with **Monthly** frequency to see the overall trend.
 3. Switch to **Weekly** and compare the granularity.
-4. Add a categorical column (e.g. author, genre, or platform) as a Group By column and re-run.
+4. Add a categorical column (e.g. author, genre, or platform) as a Group By column and choose **Run** again.
 5. Click a period of high activity to select it, then Shift-click a later period to extend the selection.
-6. Click **Add to Workspace** to extract those documents into a new data block for further analysis.
+6. Download the chart in the format you need and compare it with the monthly view.
 
 [← Back to tutorial index](./index.md)

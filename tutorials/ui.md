@@ -17,8 +17,10 @@ The left sidebar lists the available tool modules. Click a tool name to switch t
 - [**Token Frequency**](./token-frequency.md) — count and explore the most common terms.
 - [**Concordance**](./concordance.md) — inspect search terms in their surrounding context.
 - [**Trends and Sequence**](./sequential-analysis.md) — count documents over time or any ordered numeric axis.
-- [**Topic Modelling**](./topic-modeling.md) — discover themes using BERTopic.
+- [**Topic Modelling**](./topic-modeling.md) — discover themes with native semantic clustering.
 - [**Quotation Extraction**](./quotation.md) — capture quoted speech with speaker and verb annotations.
+- [**Annotation**](./annotation.md) — label text manually or with a configured AI provider.
+- [**Export**](./export.md) — download selected Data Blocks or a Workspace archive.
 
 The edit icon next to the heading lets you customise which tools appear.
 
@@ -57,13 +59,14 @@ The **Workspace Graph View** occupies the top-right area and visualises Data Blo
 - Click a node to select that data block across the entire interface. Click it again to deselect. Selections made here are reflected immediately in the Data Blocks panel (section 2) and vice versa.
 - Hover a Data Block and open its settings menu to **Rename**, **Clone**, **Undo**, **Redo**, or **Delete** it. Undo and Redo availability comes from that Data Block's current backend session history.
 - Use **Rename** to rename the active workspace.
-- Pan and zoom the graph with your mouse to navigate large workspaces. A control panel sits at the top-right corner of the graph with the following buttons:
+- Pan and zoom the graph with your mouse to navigate large workspaces. A vertical control panel sits at the top-left corner of the graph. Its collapsed form shows the selected/total Data Block count (for example, **0/2**); hover over or focus the panel to expand its button labels and the word **selected**.
+  The panel provides the following actions:
   - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="13" height="13" style="display:inline;vertical-align:text-bottom"><path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z"/></svg> **Zoom in** — increases the zoom level.
   - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5" width="13" height="2" style="display:inline;vertical-align:middle"><path d="M0 0h32v4.2H0z"/></svg> **Zoom out** — decreases the zoom level.
   - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30" width="13" height="12" style="display:inline;vertical-align:text-bottom"><path d="M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.631A4.63 4.63 0 0 0 0 4.63v5.216h3.692V4.631zM27.354 0h-5.2v3.692h5.215c.53 0 .938.4.938.939v5.215H32V4.631A4.63 4.63 0 0 0 27.354 0zm.954 24.746c0 .53-.4.938-.939.938h-5.215V29.338h5.215A4.63 4.63 0 0 0 32 24.708v-5.215h-3.692v5.253zm-23.677.938a.939.939 0 0 1-.939-.938v-5.253H0v5.215A4.63 4.63 0 0 0 4.631 30h5.215v-3.692H4.631v.376z"/></svg> **Zoom to fit** — resets the view so all nodes are visible at once.
-  - <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 32" width="10" height="13" style="display:inline;vertical-align:text-bottom"><path d="M21.333 10.667H19.81V7.619C19.81 3.429 16.38 0 12.19 0 8 0 4.571 3.429 4.571 7.619v3.048H3.048A3.048 3.048 0 0 0 0 13.714v15.238A3.048 3.048 0 0 0 3.048 32h18.285a3.048 3.048 0 0 0 3.048-3.048V13.714a3.048 3.048 0 0 0-3.048-3.047zM12.19 24.533a3.048 3.048 0 1 1 0-6.095 3.048 3.048 0 0 1 0 6.095zm4.724-13.866H7.467V7.619a4.723 4.723 0 0 1 9.447 0v3.048z"/></svg> **Lock** — toggles whether nodes can be dragged. When locked, node positions are fixed; panning and zooming still work.
   - **□ / ▣ Overview** — toggles a minimap in the bottom-right corner of the graph, giving a bird's-eye view of the full workspace layout. Click again to hide it.
   - **⊘ Clear selection** — deselects all currently selected data blocks at once. Greyed out when nothing is selected.
+  - **Delete (n)** — asks for confirmation, then deletes all selected Data Blocks. Greyed out when nothing is selected.
 - Asterisked nodes indicate the currently selected data blocks.
 
 <h2 id="help-ui-data-viewer">5. Data Viewer</h2>
@@ -104,20 +107,33 @@ The **Working Directory** indicator at the bottom of the left sidebar shows the 
 - The default location is `~/Documents/ldaca`. This applies when running the app locally — via self-hosting, the Tauri desktop app, or UVX.
 - This section is not available in multi-user mode, where storage is managed server-side.
 
-<h2 id="help-ui-help-feedback">8. Help and Feedback</h2>
+<h2 id="help-ui-appearance">8. Appearance</h2>
+
+Open **Settings → General → Appearance** to switch between **Light 2026** and
+**Dark 2026**. The interface changes immediately and the selection is saved to
+your account. Wordflow uses the last successful selection during startup so a
+reload does not briefly show the other theme. Charts and Data Block identity
+colors remain stable, while downloaded chart images keep a white background.
+
+<h2 id="help-ui-help-feedback">9. Help and Feedback</h2>
 
 The **Help** and **Feedback** buttons at the very bottom of the left sidebar provide quick access to assistance.
 
 - **Help** opens the built-in written guides in a floating window (the one you are currently reading). Clicking any **?** icon scrolls Help to the relevant section.
 - **Feedback** opens a form where you can report bugs, request features, or ask questions. Your feedback goes directly to the developer team. Please do not include any confidential information.
 <span id="help-ui-hint-system"></span>
-- A **Contextual Hint** may appear after a successful action when a feature has
-  a short next-step message. Choose **Got it** or press **Enter** to acknowledge
-  that version. It will not appear again on this device unless its guidance is
-  updated.
+- Each of the nine functions can show brief **Contextual Hints** as you reach
+  useful milestones. Several hints may form a progressive sequence, but each
+  is acknowledged independently. Choose **Got it** or press **Enter** to
+  acknowledge the current version and continue to another milestone already
+  reached.
+- Choose **Not now** or press **Escape** to pause hints for the current function
+  visit without acknowledging anything. Switching Analysis Tabs does not
+  resume them; leave the function and return to retry the earliest eligible
+  unacknowledged hint.
 - Contextual Hints can be disabled under **Settings → Guidance**. The same page
-  can reset acknowledgment history for the current user. This release includes
-  the guidance framework but does not ship automatic Contextual Hints.
+  can reset acknowledgment history for the current user, causing eligible hint
+  versions to appear again on this device.
 - A replayable **Guided Tour** is shown in Help only when one is available. A
   tour is started deliberately and is unaffected by the Contextual Hint switch.
 
