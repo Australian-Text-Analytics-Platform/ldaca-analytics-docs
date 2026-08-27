@@ -8,7 +8,7 @@
 
 The Trends and Sequence tool counts documents over time — or over any ordered numeric axis — and plots the result as a chart. It is useful for seeing how activity, mentions, or any measurable quantity rises and falls across a corpus.
 
-You can break a single trend into multiple lines by grouping on one or more categorical columns, and you can select specific time periods to extract as a new data block for further analysis.
+You can break a single trend into multiple lines by grouping on one or more categorical columns, then zoom into and select specific periods for closer inspection.
 
 <h2 id="help-sequential-parameters">Parameter panel</h2>
 
@@ -33,6 +33,8 @@ When a datetime column is selected, choose how to group records into time bucket
 
 | Option | Groups records by |
 |---|---|
+| Per second | Each second |
+| Per minute | Each minute |
 | Hourly | Each hour of the day |
 | Daily | Each calendar day |
 | Weekly | Each week (Mon–Sun) |
@@ -63,40 +65,27 @@ Click **Add Group** to add a column selector row. A badge next to each selector 
 
 When multiple grouping columns are added, categories are combined across all columns. Be aware this multiplies the number of series: three platforms × four genres = twelve combined series. Too many series can make the chart unreadable.
 
-**Case sensitive** — a checkbox that appears once at least one group column is added. When checked, values that differ only in capitalisation are treated as separate groups. When unchecked, they are merged.
+Trends retains exact group values in its result. After the analysis finishes,
+use **Uncased** beside the result legend when values that differ only in
+capitalisation should be displayed and filtered as one group.
 
 <h2 id="help-sequential-run">Step 5 — Run the analysis</h2>
 
-Click **Run** to start the analysis. The button label changes to **Update** when you change parameters after a successful run, letting you re-run without clearing first.
+Click **Run** to start the analysis. The label always remains **Run**. Parameters
+lock only while the Analysis is submitting, queued, or running. After success,
+change an execution input to enable Run again; reverting to the submitted values
+disables it. Chart type, axis, selection, visibility, and Uncased controls do not
+enable Run because they only change result presentation or filtering.
 
 <h2 id="help-sequential-results">Result panel</h2>
 
 ![Trends and Sequence results](tutorials/assets/sequential_analysis/trends_results.png)
 
-The result panel shows a summary row, a chart, a legend, and the period-selection controls for extracting data.
-
-<h3 id="help-sequential-stats">Summary stats</h3>
-
-Six tiles at the top of the result panel summarise the current view. The **Total**, **Shown**, and **Chosen** tiles display two numbers separated by a slash — for example *42 / 1,250* — where the first number is the count of time-period buckets and the second is the total document count across those buckets.
-
-| Tile | What it shows |
-|---|---|
-| Time Column | The column used as the time axis |
-| Frequency / Numeric Interval | The bucketing unit in effect — e.g. *Monthly* or *Interval: 10* |
-| Total | All buckets / all documents in the result, before any filtering |
-| Shown | Buckets / documents remaining after the Min Group Size filter is applied |
-| Chosen | Buckets / documents in your current period selection; shows *0 / 0* until you click a period |
-| Groups | The group-by columns in effect, listed by name, or *None* |
-
-For example, a **Shown** value of *18 / 934* means 18 time buckets are currently visible, together containing 934 documents. The **Chosen** tile updates live as you click periods in the chart, and its document count is what drives the **Add to Workspace** button.
-
-<h3 id="help-sequential-min-group-size">Min Group Size filter</h3>
-
-The **Min Group Size** input in the results header hides any group (series) whose total document count is below the value you enter. This is useful when a few groups have very few records and clutter the chart.
-
-- Default is 10. Set to 0 to show all groups regardless of size.
-- The filter applies immediately — no need to re-run.
-- The **Shown** tile updates to reflect how many points and documents remain after filtering.
+The result panel follows the Concordance dispersion layout: result actions in
+the header, chart presentation controls directly above the plot, then the chart,
+legend, and period-selection controls. Time column, frequency or interval, and
+Group By settings remain visible in the parameter panel instead of being
+repeated in the result.
 
 <h3 id="help-sequential-chart-type">Chart type</h3>
 
@@ -119,46 +108,68 @@ In Linear mode with a datetime column, axis ticks render as date labels (e.g. *A
 
 <h3 id="help-sequential-download">Download chart</h3>
 
-Click the download button (↓ icon) in the results header to export the chart. A dialog lets you choose the format: PNG, SVG, or PDF. The exported file includes a header block with the data block name, time column, frequency, and document counts, plus a legend.
+Click the download button (↓ icon) in the results header to export the chart. A dialog lets you choose SVG, PNG, or JPEG. The exported file includes a header block with the data block name, time column, frequency, and document counts, plus a legend.
 
 <h3 id="help-sequential-legend">Legend and group visibility</h3>
 
-The legend below the chart lists all groups with their colours. Click any legend item to hide or show that group. Hidden groups are shown with a strikethrough label and reduced opacity.
+The legend below the chart lists all groups with their colours, full-result count, and share of the counts among currently visible groups. Percentages use one decimal place and do not change when periods are selected. When periods are selected, each visible label shows *selected / total* before the percentage. Click any legend item to hide or show that group. Hidden groups retain their count detail, show **Hidden**, and use a strikethrough label with reduced opacity.
 
-Use this to focus on a subset of groups without changing the Min Group Size filter. Hidden groups are excluded from chart exports but are still counted in the **Total** tile.
+Use this to focus on a subset of groups. Hidden groups are not plotted and are
+marked hidden in chart exports, while their legend entry retains its
+full-result count.
+
+Select **Uncased** beside the legend to merge case variants without rerunning
+the analysis. For example, `jobs` and `Jobs` become `jobs/Jobs`, with their
+per-period values, totals, percentages, tooltip values, and export entry
+summed. Changing this checkbox restores all hidden groups while preserving
+selected periods, zoom, chart type, and axis mode.
+
+<h3 id="help-sequential-zoom">Zoom and navigation</h3>
+
+Use the chart slider, mouse wheel, or trackpad pinch to zoom along the horizontal axis. The toolbar also provides keyboard-accessible **Zoom in**, **Zoom out**, and **Reset zoom** buttons. Zoom changes only the viewport: it does not change the analysis result or clear selected periods.
 
 <h3 id="help-sequential-period-selection">Period selection</h3>
 
-Click any bar, line point, or area segment in the chart to select that time period. Selected periods are highlighted; unselected periods are dimmed to 25 % opacity.
+Click anywhere inside the plot to select the time period nearest the vertical axis pointer. You do not need to target a line point, bar, or area segment. Selected periods are highlighted; unselected periods are dimmed to 25 % opacity.
 
 To select a range, click one period then **Shift-click** another — all periods between them are selected.
 
-The **Chosen** tile tracks how many points and documents are in the current selection. The **Add to Workspace** button shows the selection count.
+For drag selection, turn on **Select range** and drag across the periods you want. A new drag replaces the current selection; **Shift-drag** adds the brushed range. Turn the mode off, or press **Escape** while the chart is focused, to return to point selection.
+
+With keyboard focus on the chart, use **Left Arrow**, **Right Arrow**, **Home**, and **End** to inspect points. Press **Enter** or **Space** to select the focused point; hold **Shift** to extend the existing selection semantics.
 
 Use **Clear Selection** to deselect all periods without losing any other settings.
 
-<h3 id="help-sequential-detach">Add to Workspace</h3>
+<h3 id="help-sequential-add-to-workspace">Add to Workspace</h3>
 
-Once you have selected the periods of interest, use the **Add to Workspace** control below the chart to extract those documents into a new data block:
+Click **Add to Workspace** to create a Data Block containing original source
+rows represented by the current Trends result. If periods are selected, only
+those periods are included; with no selection, all periods are included. Hidden
+legend groups are always excluded. Zoom changes only the viewport and never the
+rows added to the Workspace.
 
-1. Type a name in the **New data block name** field, or press <kbd>Tab</kbd> to accept the auto-generated placeholder (e.g. *MyCorpus_trend*).
-2. Click **Add to Workspace (N)** — where N is the number of selected time periods.
+When Uncased is enabled, hiding a merged legend entry excludes every exact
+spelling represented by that entry.
 
-The new data block will contain all documents from the selected periods that belong to the visible groups (groups hidden via the legend are excluded). The button is disabled if no periods are selected, if all periods are selected, or if no visible groups remain after the Min Group Size filter.
+The time or numeric axis column is required. The source Document Column and
+Group By columns start selected but remain optional, while other source columns
+start unselected. The dialog preserves source-column order and defaults the new
+name to the source name followed by `_trends`.
 
 <h3 id="help-sequential-clear-results">Clear results</h3>
 
-The tab keeps its current Trends and Sequence Analysis in the backend so it can reload its lifecycle and Result. **Clear Results** removes that Analysis and resets the tab, including after failure or cancellation. **Re-run** clears the current Analysis before submitting its replacement.
+The tab keeps its current Trends and Sequence Analysis in the backend so it can
+reload its lifecycle and Result. **Clear Results** removes that Analysis and
+resets the tab. After a failure or cancellation, parameters remain editable but
+Run stays disabled until you choose Clear Results.
 
 <h2 id="help-sequential-troubleshooting">Troubleshooting</h2>
 
 | Symptom | Likely cause | What to try |
 |---|---|---|
 | Chart shows only one bar / point | Frequency too coarse for the date range | Try a finer frequency (e.g. daily instead of yearly) |
-| All groups filtered out | Min Group Size is too high | Lower Min Group Size or set it to 0 |
 | Too many series, chart is unreadable | Too many distinct values in group-by column(s) | Remove a group-by column, or filter the data block first |
 | "No sequential analysis data available" | Column type or interval is incompatible with the data | Check the column contains valid dates or numbers; check the interval is > 0 |
-| Add to Workspace is disabled | No periods selected, or all periods selected, or no visible groups | Select a subset of periods; adjust Min Group Size so at least one group is visible |
 
 <h2 id="help-sequential-defaults">Quick-reference defaults</h2>
 
@@ -170,17 +181,18 @@ The tab keeps its current Trends and Sequence Analysis in the backend so it can 
 | Numeric Interval | 1 | Required; must be > 0 |
 | Group By | None | Up to 3 columns |
 | Case Sensitive | Off | Only appears when a group-by column is added |
-| Min Group Size | 10 | Set to 0 to show all groups |
 | Chart Type | Line Chart | — |
 | X-axis | Categorical | Switch to Linear for time-proportional spacing |
+| Zoom | Full range | Use Reset zoom to restore the complete result |
+| Select range | Off | Turn on before dragging across periods |
 
 ## Practice exercise
 
 1. Select a data block that has a datetime column.
 2. Run the analysis with **Monthly** frequency to see the overall trend.
 3. Switch to **Weekly** and compare the granularity.
-4. Add a categorical column (e.g. author, genre, or platform) as a Group By column and re-run.
-5. Click a period of high activity to select it, then Shift-click a later period to extend the selection.
-6. Click **Add to Workspace** to extract those documents into a new data block for further analysis.
+4. Add a categorical column (e.g. author, genre, or platform) as a Group By column and choose **Run** again.
+5. Zoom into a period of high activity, turn on **Select range**, and drag across several periods.
+6. Download the chart in the format you need and compare it with the monthly view.
 
 [← Back to tutorial index](./index.md)
