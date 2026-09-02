@@ -86,6 +86,7 @@ The **Data Viewer** fills the bottom-right area and displays the contents of sel
 - Click any row to open the **Row Details** panel, which displays the full contents of that row in a readable layout. The <a href="tutorials/assets/ui/row_details.png" target="_blank">row details</a> panel has two sections:
   - **Document** — shows the full text of the data block's designated document column (the column marked as the primary text when the data was loaded, e.g. the column named `text`, `document`, or `doc`). The section heading displays the column name, e.g. *Document: text*. If no document column has been configured for the data block, this section is omitted.
   - **Metadata** — shows all remaining columns as a two-column key/value table, making it easy to inspect structured fields such as speaker, date, or source alongside the document text.
+- Use **Previous row** and **Next row** at the bottom of the Row Details panel to review adjacent displayed rows. The Data Viewer changes table pages automatically when you move past the first or last row on a page.
 - The table is paginated — use the controls at the bottom to navigate through large data blocks.
 - Scroll vertically with your mouse scroll wheel. Hold **Shift** to scroll horizontally.
 
@@ -100,12 +101,12 @@ The centre column is the main working area and shows the interface of whichever 
 
 <h2 id="help-ui-working-directory">7. Working Directory</h2>
 
-The **Working Directory** indicator at the bottom of the left sidebar shows the local file-system path where workspace data is stored.
+The Data Root is the filesystem directory where Wordflow stores durable application data.
 
-- Click the edit icon to change the directory.
-- All workspaces, uploaded files, and exported outputs are stored under this path.
-- The default location is `~/Documents/ldaca`. This applies when running the app locally — via self-hosting, the Tauri desktop app, or UVX.
-- This section is not available in multi-user mode, where storage is managed server-side.
+- On first launch without `DATA_ROOT` or saved configuration, use the setup screen's recommended location or choose another folder.
+- The desktop app opens the operating system's native folder picker. In a browser, enter an absolute path on the server that runs Wordflow.
+- Change an existing single-user Data Root under **Settings → Workspace → Working Directory**. After a successful change, Wordflow reloads automatically and does not copy data from the previous root.
+- Environment-managed and multi-user deployments show operator guidance instead of allowing a client-side change.
 
 <h2 id="help-ui-appearance">8. Appearance</h2>
 
